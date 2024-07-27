@@ -1,0 +1,19 @@
+class Solution(object):
+    def numberOfArithmeticSlices(self, nums):
+        n = len(nums)
+        if n < 3:
+            return 0
+        
+        totalNumSlices = 0
+        numSequences = [defaultdict(int) for _ in range(n)]
+        
+        for i in range(n):
+            currentNum = nums[i]
+            for j in range(i):
+                prevNum = nums[j]
+                currentDiff = currentNum - prevNum
+                numPreviousSequences = numSequences[j][currentDiff]
+                totalNumSlices += numPreviousSequences
+                numSequences[i][currentDiff] += numPreviousSequences + 1
+        
+        return totalNumSlices
