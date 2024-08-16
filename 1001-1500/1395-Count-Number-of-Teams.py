@@ -1,21 +1,22 @@
-from sortedcontainers import SortedList
-
 class Solution(object):
     def numTeams(self, rating):
-        def countElementsOnSides(val, refList):
-            lowerElements = refList.bisect_left(val)
-            higherElements = len(refList) - refList.bisect_right(val)
-            return lowerElements, higherElements
+        leftCount = defaultdict(list)
+        n = len(rating)
+        order = []
         
-        numValidTeams = 0
-        leftList = SortedList(rating[:1])
-        rightList = SortedList(rating[1:])
-
-        for val in rating[1:]:
-            rightList.remove(val)
-            lowerLeft, higherLeft = countElementsOnSides(val, leftList)
-            lowerRight, higherRight = countElementsOnSides(val, rightList)
-            numValidTeams += (lowerLeft * higherRight + higherLeft * lowerRight)
-            leftList.add(val)
+        for i in range(n):
+            indRating = rating[i]
+            insertPos = bisect.bisect(order, indRating)
+            order[insertPos:insertPos] = [indRating]
+            leftCount[indRating] = [insertPos, i - insertPos]
         
-        return numValidTeams
+        
+        order = []
+        numTeams = 0
+        for i in range(n-1, -1, -1):
+            indRating = rating[i]
+            insertPos = bisect.bisect(order, indRating)
+            order[insertPos:insertPos] = [indRating]
+            numTeams += (leftCount[indRating][1] * insertPos + leftCount[indRating][0] * (n - 1 - i - insertPos))
+  
+        return numTeams
