@@ -3,22 +3,23 @@ class Solution(object):
         n = len(nums)
         nums.sort()
         
-        def diffCount(threshold):
-            i, j, count = 0, 0, 0
-            while i < n:
-                while j < n and nums[j] - nums[i] <= threshold:
-                    j += 1
-                count += j - i - 1
-                i += 1
+        def countPairs(m):
+            count = 0
+            i, j = 0, 1
+            while j < n:
+                while i < j and nums[j] - nums[i] > m:
+                    i += 1
+                count += (j - i)
+                j += 1
+            
             return count
         
-        minVal = 0
-        maxVal = nums[-1] - nums[0]
-        while minVal < maxVal:
-            midVal = (minVal + maxVal) // 2
-            if diffCount(midVal) < k:
-                minVal = midVal + 1
+        low, high = 0, nums[-1] - nums[0]
+        while low < high:
+            mid = low + (high - low) // 2
+            if countPairs(mid) >= k:
+                high = mid
             else:
-                maxVal = midVal
+                low = mid + 1
         
-        return minVal
+        return low

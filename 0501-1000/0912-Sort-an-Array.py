@@ -8,7 +8,7 @@ class Solution(object):
                 rightList = mergesort(inputList[midIndex:])
                 inputList = merge(leftList, rightList)
             return inputList
-
+        
         def merge(list1, list2):
             sortedList = []
             while list1 and list2:
@@ -21,5 +21,5 @@ class Solution(object):
             if not list2:
                 sortedList.extend(list1)
             return sortedList
-
+        
         return mergesort(nums)
